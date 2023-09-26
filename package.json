@@ -41,7 +41,7 @@
     "node": ">=16.0.0"
   },
   "keywords": [
-    "queue",
+    "events", "conversion", "userjourney", "automations",
     "saas",
     "importsaas"
   ],
