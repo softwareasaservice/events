@@ -4,41 +4,13 @@ Build conversion and user journey automations based on events happening or not h
 
 Pass timeouts using the `ms` package which is the only dependency for this package.
 
-## Install
+The system is simple. You push/ingest events. And you have one workflow  function that is called automatically when an event in ingested, allowing you to build event-based automations. There are no cloud based or networking features. But you can over-ride the in-memory version for eg: to set and get from s3/a database, etc.
 
-    # with yarn 
-    yarn add @softwareasaservice/events
-    
-    # or with npm
-    npm install @softwareasaservice/events
+The innovation is a temporal/inngest style workflow/queing engine where the emphasis is on being developer friendly.
 
+## Demo 
 
-## Usage
-
-    var Events = require('@softwareasaservice/events').Events;
-    
-    var events = new Events({workflow})
-
-A workflow is the function that is called after every event in ingested, allowing your to build event-based automations.
-
-
-## Pushing events 
-
-## Example workflow with 5 automations
-
-	var Events = require('@softwareasaservice/events').Events;
-
-    var events = new Events({workflow:(){}})	
-	// uses in-memory store 
-
-    var user = {id: "user1"};
-    var event = "someEvent";
-    var data = {"foo":"bar", "level":2};
-
-    // push events to in-memory store
-    events.ingest({event, user, data})
-
-## Example output of workflow with 5 automations
+Here is an example of 1 user generated event `app/email.submitted` triggering a workflow involving reminders for opening an account, for verifying email, and for creating 2 posts.
 
 	creating event users[user1][app/email.submitted]
 		waited 1s for account.created for user  { id: 'user1' }
@@ -66,8 +38,11 @@ A workflow is the function that is called after every event in ingested, allowin
 	        send reminder to write post2
 	creating event users[user1][app/post.created]
 		end of workflow
+		
+All times in this example have been made in seconds but you can very well replace it with `1d`, `7d` or minutes/seconds/days/weeks/months as you see fit.
 
-## Code for example workflow with 5 automations
+
+## Code for the example workflow of 5 automations
 
 	var Events = require('@softwareasaservice/events').Events;
 
@@ -119,6 +94,35 @@ A workflow is the function that is called after every event in ingested, allowin
         }
     }
     const events = new Events({workflow});
+    
+## Install
+
+	# with yarn 
+	yarn add @softwareasaservice/events
+    
+	# or with npm
+	npm install @softwareasaservice/events
+
+## Usage
+
+    var Events = require('@softwareasaservice/events').Events;
+    
+    var events = new Events({workflow})
+
+
+## Pushing events 
+
+	var Events = require('@softwareasaservice/events').Events;
+
+    var events = new Events({workflow:(){}})	
+	// uses in-memory store 
+
+    var user = {id: "user1"};
+    var event = "someEvent";
+    var data = {"foo":"bar", "level":2};
+
+    // push events to in-memory store
+    events.ingest({event, user, data})
 
 
 ## Replace in-memory store
@@ -128,14 +132,7 @@ A workflow is the function that is called after every event in ingested, allowin
 	// To use your own stores, pass in your setter, getter functions
 	var events = new Events({workflow, checkEvent, setEvent})
 
-
-## Adding to the queue
-    
-    var user = {id:"user1"};
-    var event = "app/email.verified"
-    var data = {"foo":"bar"};
-    events.ingest({user, event, data});
-      
+`checkEvent` and `setEvent` takes `{user, data, event}`. See the source code for learning how to create your own setters and getters that possibly read/write to a persistent storage like s3/minio or a database. 
 
 ## Licence
 MIT
