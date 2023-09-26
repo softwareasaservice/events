@@ -1,12 +1,15 @@
-# events, a minimal user journey automation pacakge for Node/React
+# events, a minimal user journey automation package for Node/React
 
-Build conversion and user journey automations based on events happening or not happening without a period of time.
+Build conversion and user journey automations based on events happening or not happening over a period of time.
 
 Pass timeouts using the `ms` package which is the only dependency for this package.
 
 The system is simple. You push/ingest events. And you have one workflow  function that is called automatically when an event in ingested, allowing you to build event-based automations. There are no cloud based or networking features. But you can over-ride the in-memory version for eg: to set and get from s3/a database, etc.
 
 The innovation is a temporal/inngest style workflow/queing engine where the emphasis is on being developer friendly.
+
+
+![image](https://github.com/importsaas/screenshots/blob/main/events/3line.png?raw=true)
 
 ## Demo 
 
