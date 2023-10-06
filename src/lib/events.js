@@ -17,7 +17,7 @@ export class Events {
         var users = _this.users
         var ev = users[user.id]
         if(!match){
-            return {result:ev[event]}
+            return ev[event]
         }
         var _match = Object.entries(match)[0]
         if(DEBUG) console.log('looking for ', user.id , event, ' gave ', ev, ' look for ', match, ' gave ', _match)
