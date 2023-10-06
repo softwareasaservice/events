@@ -89,6 +89,8 @@ All times in this example have been made in seconds but you can very well replac
                     console.log('\tsend reminder to write post2');
                 }else{
                     console.log('end of workflow');
+ 		    // return a result to end the workflow
+		    return {result: post2Created}
                 }
             }
         }else{
