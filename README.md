@@ -149,12 +149,11 @@ All times in this example have been made in seconds but you can very well replac
 	var events = new Events({workflow, checkEvent, setEvent})
 
     // To use an S3 store
-    // const {setup, checkEvent, setEvent} = require('@softwareasaservice/eventsWorkflowS3');
+    // const {setup, checkEvent, setEvent} = require('@softwareasaservice/eventsworkflows3');
 	var events = new Events({workflow, checkEvent, setEvent}, {
         S3:{
             OBJECT_STORE_PREFIX:'some-prefix-in-your-bucket/', 
-            client: myS3Client // some s3 client that implements
-                   // get(_path),list(_path), put(_path, jsonObj)
+            client: myS3Client // should implement get(_path),list(_path), put(_path, jsonObj)
         }
     })
 
