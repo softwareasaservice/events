@@ -63,9 +63,9 @@ All times in this example have been made in seconds but you can very well replac
 
         // then do exponential backoff reminders
         var expBackoff1 = (reminders.result? reminders.result.length*2:1)+'s';
-    var userData = await events.waitFor(user, 'app/account.created', {match:{email: data.email}, timeout: expBackoff1});
+        var userData = await events.waitFor(user, 'app/account.created', {match:{email: data.email}, timeout: expBackoff1});
         if(!userData.result){
-            console.log('waited '+expBackoff1+' for account.created for user ', user);// since userData was ', userData, ' event:',event, ' user:', user, ' data:', data);
+            console.log('waited '+expBackoff1+' for account.created for user ', user);
             console.log('\tsend reminder to create account');
             return await events.ingest({event:'reminder/account.created', data:{email: data.email}, user:user});
         }
@@ -89,8 +89,8 @@ All times in this example have been made in seconds but you can very well replac
                     console.log('\tsend reminder to write post2');
                 }else{
                     console.log('end of workflow');
- 		    // return a result to end the workflow
-		    return {result: post2Created}
+ 		            // return a result to end the workflow
+		            return {result: post2Created}
                 }
             }
         }else{
@@ -99,6 +99,17 @@ All times in this example have been made in seconds but you can very well replac
         }
     }
     const events = new Events({workflow});
+
+## Sleep
+
+    // waits for 30 seconds
+    await events.sleep("30s")
+
+    // waits for 1 hour
+    await events.sleep("1h")
+
+    // anything passed in second argument is given back in the response
+    var foo = await events.sleep("1h", {foo:"bar"}).foo
     
 ## Install
 
@@ -136,6 +147,16 @@ All times in this example have been made in seconds but you can very well replac
 
 	// To use your own stores, pass in your setter, getter functions
 	var events = new Events({workflow, checkEvent, setEvent})
+
+    // To use an S3 store
+    // const {setup, checkEvent, setEvent} = require('@softwareasaservice/eventsWorkflowS3');
+	var events = new Events({workflow, checkEvent, setEvent}, {
+        S3:{
+            OBJECT_STORE_PREFIX:'some-prefix-in-your-bucket/', 
+            client: myS3Client // some s3 client that implements
+                   // get(_path),list(_path), put(_path, jsonObj)
+        }
+    })
 
 `checkEvent` and `setEvent` takes `{user, data, event}`. See the source code for learning how to create your own setters and getters that possibly read/write to a persistent storage like s3/minio or a database. 
 
