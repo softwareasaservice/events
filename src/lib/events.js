@@ -12,6 +12,7 @@ export class Events {
         this.user = user
         this.workflow = opts.workflow || function () { }
         this.tick = opts.tick || '1m'
+        this.stopped = true
         this.setup()
         return this
     }

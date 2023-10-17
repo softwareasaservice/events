@@ -1,6 +1,6 @@
 {
   "name": "@softwareasaservice/events",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Push events and create user journey automations, from @importsaas",
   "main": "dist/cjs/index.js",
   "module": "dist/mjs/index.js",
