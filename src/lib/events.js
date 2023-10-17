@@ -11,6 +11,7 @@ export class Events {
         this.inactive = false
         this.user = user
         this.workflow = opts.workflow || function () { }
+        this.tick = opts.tick || '1m';
         this.setup()
         return this
     }
@@ -102,19 +103,22 @@ export class Events {
             opts = opts || {}
             var {DEBUG, ctr, timeout, timeoutMs, done} = opts
             var now = Date.now()
+            if(!timeout){
+                timeout = _this.tick;
+            }
             _this.checkEvent({user, event}, opts, _this).then(function (matched) {
                 if(matched instanceof Error){
                     if (DEBUG) console.log('waitForTimeout err:', matched)
                     return setTimeout(function () {
                         _this.waitForTimeout(user, event, {...opts, ctr: ctr + 1, done: {invokedBy: ctr, func: (done === null || done === void 0 ? void 0 : done.func) || resolve}})
-                    }, 1000)
+                    }, ms(timeout))
                 }
                 var cont = matched || (now >= timeoutMs)
                 ctr = ctr || 0
                 if (!cont) {
                     setTimeout(function () {
                         _this.waitForTimeout(user, event, {...opts, ctr: ctr + 1, done: {invokedBy: ctr, func: (done === null || done === void 0 ? void 0 : done.func) || resolve}})
-                    }, 1000)
+                    }, ms(timeout))
                 }
                 else {
                     var _result = {result: matched, user, event, timeout, ctr}
@@ -173,8 +177,16 @@ export class Events {
         if(!_this.inactive){
             _done = await _this.workflow(param, ev, _this)
         }
-        if(!_done?.result){
-            setTimeout(()=> { _this.workflowLoop(param, ev) }, 500)
+        var _stop = false;
+        if(Array.isArray(_done)) {
+            _stop = _done.filter(x => x);
+            _stop = _stop.length ? true : false;
+        }
+        if(_stop){
+            //console.log('\tnot done, so continue ');
+        }else{
+            //console.log('\tdone has data for atleast 1 promise, so discontinue ');
+            setTimeout(() => { _this.workflowLoop(param, ev); }, ms(_this.tick));
         }
     }
 
@@ -184,7 +196,9 @@ export class Events {
         var user = ev.user? ev.user : _this.user
         if (!_this.users[user.id]) {
             _this.users[user.id] = ev.data
-            _this.workflowLoop({user: user}, ev)
+            if(!opts?.system){
+                _this.workflowLoop({user: user}, ev)
+            }
         }
     
     }

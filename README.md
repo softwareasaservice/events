@@ -49,7 +49,7 @@ All times in this example have been made in seconds but you can very well replac
 
 	var Events = require('@softwareasaservice/events').Events;
 
-    var events = new Events({workflow})	
+    var events = new Events({id:"user1"}, {workflow})	
       
     async function workflow({user}){
     	// read in-memory store events.users. 
@@ -98,7 +98,6 @@ All times in this example have been made in seconds but you can very well replac
             console.log('\tno email verified, wait for it');
         }
     }
-    const events = new Events({workflow});
 
 ## Sleep
 
@@ -123,14 +122,14 @@ All times in this example have been made in seconds but you can very well replac
 
     var Events = require('@softwareasaservice/events').Events;
     
-    var events = new Events({workflow})
+    var events = new Events({"id":"user2"}, {workflow})
 
 
 ## Pushing events 
 
 	var Events = require('@softwareasaservice/events').Events;
 
-    var events = new Events({workflow:(){}})	
+    var events = new Events({"id":"user3"}, {workflow:(){}})	
 	// uses in-memory store 
 
     var user = {id: "user1"};
@@ -138,7 +137,7 @@ All times in this example have been made in seconds but you can very well replac
     var data = {"foo":"bar", "level":2};
 
     // push events to in-memory store
-    events.ingest({event, user, data})
+    events.ingest({event, data})
 
 
 ## Replace in-memory store
