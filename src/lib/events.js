@@ -184,7 +184,7 @@ export class Events {
         }
         if(_stop){
             //console.log('\tnot done, so continue ');
-            _this.stopped = true;
+            _this.stopped = true
         }else{
             //console.log('\tdone has data for atleast 1 promise, so discontinue ');
             setTimeout(() => { _this.workflowLoop(param, ev) }, ms(_this.tick))
@@ -199,7 +199,7 @@ export class Events {
             _this.users[user.id] = ev.data
         }
         if(!opts?.system && _this.stopped){
-            _this.stopped = false;
+            _this.stopped = false
             _this.workflowLoop({user: user}, ev)
         }
     }
