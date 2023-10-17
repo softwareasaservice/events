@@ -11,7 +11,7 @@ export class Events {
         this.inactive = false
         this.user = user
         this.workflow = opts.workflow || function () { }
-        this.tick = opts.tick || '1m';
+        this.tick = opts.tick || '1m'
         this.setup()
         return this
     }
@@ -104,7 +104,7 @@ export class Events {
             var {DEBUG, ctr, timeout, timeoutMs, done} = opts
             var now = Date.now()
             if(!timeout){
-                timeout = _this.tick;
+                timeout = _this.tick
             }
             _this.checkEvent({user, event}, opts, _this).then(function (matched) {
                 if(matched instanceof Error){
@@ -177,16 +177,16 @@ export class Events {
         if(!_this.inactive){
             _done = await _this.workflow(param, ev, _this)
         }
-        var _stop = false;
+        var _stop = false
         if(Array.isArray(_done)) {
-            _stop = _done.filter(x => x);
-            _stop = _stop.length ? true : false;
+            _stop = _done.filter(x => x)
+            _stop = _stop.length ? true : false
         }
         if(_stop){
             //console.log('\tnot done, so continue ');
         }else{
             //console.log('\tdone has data for atleast 1 promise, so discontinue ');
-            setTimeout(() => { _this.workflowLoop(param, ev); }, ms(_this.tick));
+            setTimeout(() => { _this.workflowLoop(param, ev) }, ms(_this.tick))
         }
     }
 
