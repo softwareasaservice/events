@@ -181,13 +181,12 @@ export class Events {
         var _stop = false
         if(Array.isArray(_done)) {
             _stop = _done.filter(x => x)
-            _stop = _stop.length ? true : false
+            _stop = _stop.length ? false : true
         }
         if(_stop){
-            //console.log('\tnot done, so continue ');
             _this.stopped = true
         }else{
-            //console.log('\tdone has data for atleast 1 promise, so discontinue ');
+	    // if atleast one non null value, continue. if all null, stop
             setTimeout(() => { _this.workflowLoop(param, ev) }, ms(_this.tick))
         }
     }
