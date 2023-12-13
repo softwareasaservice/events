@@ -75,20 +75,20 @@ export class Events {
             users[user.id][event] = []
         }
         users[user.id][event].push(Object.assign(Object.assign({}, data), {uts: Date.now()}))
-        console.log(`creating event users[${user.id}][${event}]`)
+        if(DEBUG) console.log(`creating event users[${user.id}][${event}]`)
     }
 
     setInactive(_bool) {
         if(_bool != this.inactive){
             this.inactive = _bool
-            console.log('\tchanging inactive to ', _bool)
+            if(DEBUG) console.log('\tchanging inactive to ', _bool)
         }
     }
 
     async waitFor(user, event, opts) {
         var _this = this
         var {DEBUG, timeout} = opts || {}
-        timeout = timeout || 0
+        timeout = timeout || '1s'
         user = user ? user : _this.user
         return await this.waitForTimeout(user, event, {...opts, timeoutMs: Date.now() + (timeout ? ms(timeout) : 0)})
             .catch((err) => {
@@ -112,7 +112,7 @@ export class Events {
                     if (DEBUG) console.log('waitForTimeout err:', matched)
                     return setTimeout(function () {
                         _this.waitForTimeout(user, event, {...opts, ctr: ctr + 1, done: {invokedBy: ctr, func: (done === null || done === void 0 ? void 0 : done.func) || resolve}})
-                    }, ms(timeout))
+                    }, ms(_this.tick))
                 }
                 var cont = matched || (now >= timeoutMs)
                 ctr = ctr || 0
