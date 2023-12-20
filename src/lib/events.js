@@ -178,6 +178,10 @@ export class Events {
         if(!_this.inactive){
             _done = await _this.workflow(param, ev, _this)
         }
+        if (_done instanceof Error) {
+            console.log('workflow returned error , stop since ', _done);
+            return;
+        }
         var _stop = false
         if(Array.isArray(_done)) {
             _stop = _done.filter(x => x)
